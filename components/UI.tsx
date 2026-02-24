@@ -2,6 +2,7 @@ import React from 'react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { motion } from 'framer-motion';
+import { THEME } from '../theme';
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -13,21 +14,21 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   fullWidth?: boolean;
 }
 
-export const Button: React.FC<ButtonProps> = ({ 
-  children, 
-  className, 
-  variant = 'primary', 
-  size = 'md', 
+export const Button: React.FC<ButtonProps> = ({
+  children,
+  className,
+  variant = 'primary',
+  size = 'md',
   fullWidth = false,
-  ...props 
+  ...props
 }) => {
   const baseStyles = "inline-flex items-center justify-center font-medium transition-all duration-200 focus:outline-none disabled:opacity-50 disabled:pointer-events-none rounded-full";
-  
+
   const variants = {
-    primary: "bg-gradient-to-r from-[#A3EBB1] to-[#4A90E2] text-black shadow-[0_0_20px_rgba(74,144,226,0.4)] hover:shadow-[0_0_30px_rgba(74,144,226,0.6)] active:scale-95",
-    secondary: "bg-[#1A1F2C] border border-white/10 text-white hover:bg-[#252b3d] active:scale-95",
+    primary: `bg-gradient-to-r from-[${THEME.text}] to-[${THEME.accent}] text-black shadow-[0_0_20px_rgba(228,57,40,0.4)] hover:shadow-[0_0_30px_rgba(228,57,40,0.6)] active:scale-95`,
+    secondary: `bg-[${THEME.surface}] border border-white/10 text-white hover:bg-[${THEME.surfaceAlt}] active:scale-95`,
     danger: "bg-red-500/10 border border-red-500/50 text-red-500 hover:bg-red-500/20",
-    ghost: "bg-transparent text-[#A0AEC0] hover:text-white"
+    ghost: `bg-transparent text-[${THEME.muted}] hover:text-white`
   };
 
   const sizes = {
@@ -37,9 +38,9 @@ export const Button: React.FC<ButtonProps> = ({
   };
 
   return (
-    <motion.button 
+    <motion.button
       whileTap={{ scale: 0.98 }}
-      className={cn(baseStyles, variants[variant], sizes[size], fullWidth && "w-full", className)} 
+      className={cn(baseStyles, variants[variant], sizes[size], fullWidth && "w-full", className)}
       {...props}
     >
       {children}
@@ -49,7 +50,7 @@ export const Button: React.FC<ButtonProps> = ({
 
 export const Card: React.FC<{ children: React.ReactNode; className?: string; onClick?: () => void }> = ({ children, className, onClick }) => {
   return (
-    <div 
+    <div
       onClick={onClick}
       className={cn(
         "glass-panel rounded-[32px] p-6 text-white overflow-hidden relative",
@@ -64,9 +65,9 @@ export const Card: React.FC<{ children: React.ReactNode; className?: string; onC
 
 export const Input: React.FC<React.InputHTMLAttributes<HTMLInputElement>> = ({ className, ...props }) => {
   return (
-    <input 
+    <input
       className={cn(
-        "w-full bg-[#000000] border border-white/10 rounded-2xl h-14 px-5 text-white placeholder:text-gray-600 focus:outline-none focus:border-[#4A90E2] transition-colors",
+        `w-full bg-[${THEME.bg}] border border-white/10 rounded-2xl h-14 px-5 text-white placeholder:text-gray-600 focus:outline-none focus:border-[${THEME.accent}] transition-colors`,
         className
       )}
       {...props}
@@ -74,7 +75,7 @@ export const Input: React.FC<React.InputHTMLAttributes<HTMLInputElement>> = ({ c
   );
 };
 
-export const Badge: React.FC<{ children: React.ReactNode; color?: string }> = ({ children, color = "bg-[#4A90E2]" }) => {
+export const Badge: React.FC<{ children: React.ReactNode; color?: string }> = ({ children, color = `bg-[${THEME.accent}]` }) => {
   return (
     <span className={cn("px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider text-black inline-block", color)}>
       {children}
@@ -85,6 +86,6 @@ export const Badge: React.FC<{ children: React.ReactNode; color?: string }> = ({
 export const SectionHeader: React.FC<{ title: string; subtitle?: string }> = ({ title, subtitle }) => (
   <div className="mb-6">
     <h2 className="text-2xl font-bold text-white tracking-tight">{title}</h2>
-    {subtitle && <p className="text-[#A0AEC0] text-sm mt-1">{subtitle}</p>}
+    {subtitle && <p className={`text-[${THEME.muted}] text-sm mt-1`}>{subtitle}</p>}
   </div>
 );

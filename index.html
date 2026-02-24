@@ -7,14 +7,26 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+      /*
+       * ╔══════════════════════════════════════════════════════════════╗
+       * ║  THEME COLORS — to retheme the app, edit theme.ts first.   ║
+       * ║  Then update the matching values in this CSS block below.  ║
+       * ║                                                              ║
+       * ║  THEME.bg         = #000000  (body background, scrollbar)   ║
+       * ║  THEME.surface    = #111111  (phone frame border, glass)    ║
+       * ║  THEME.surfaceAlt = #1a1a1a  (phone frame border)           ║
+       * ║  THEME.accent     = #e43928  (scrollbar hover, gradients)   ║
+       * ║  THEME.text       = #ffffff  (gradient start color)         ║
+       * ╚══════════════════════════════════════════════════════════════╝
+       */
       main {
         /* Use the safe-area-inset-top variable, with a fallback of 1.5rem (24px) */
-        padding-top: env(safe-area-inset-top, 0.25rem);
+        padding-top: env(safe-area-inset-top, 1.5rem);
       }
       body {
         font-family: 'Inter', sans-serif;
-        background-color: #000000;
-        color: #ffffff;
+        background-color: #000000; /* THEME.bg */
+        color: #ffffff;            /* THEME.text */
         -webkit-tap-highlight-color: transparent;
       }
       /* Custom scrollbar for stealth look */
@@ -22,28 +34,47 @@
         width: 6px;
       }
       ::-webkit-scrollbar-track {
-        background: #000000;
+        background: #000000; /* THEME.bg */
       }
       ::-webkit-scrollbar-thumb {
         background: #1A1F2C;
         border-radius: 3px;
       }
       ::-webkit-scrollbar-thumb:hover {
-        background: #4A90E2;
+        background: #e43928; /* THEME.accent */
       }
       .glass-panel {
-        background: rgba(26, 31, 44, 0.85);
+        background: rgba(20, 20, 20, 0.85); /* ~THEME.surface with opacity */
         backdrop-filter: blur(12px);
         -webkit-backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.1);
       }
       .gradient-text {
-        background: linear-gradient(135deg, #A3EBB1 0%, #4A90E2 100%);
+        background: linear-gradient(135deg, #ffffff 0%, #e43928 100%); /* THEME.text → THEME.accent */
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
       }
       .gradient-bg {
-        background: linear-gradient(135deg, #A3EBB1 0%, #4A90E2 100%);
+        background: linear-gradient(135deg, #ffffff 0%, #e43928 100%); /* THEME.text → THEME.accent */
+      }
+      .phone-frame {
+        position: relative;
+        width: 100%;
+        max-width: 430px; /* iPhone 15 Pro Max width approx */
+        height: 100vh;
+        margin: 0 auto;
+        background: #000000;      /* THEME.bg */
+        overflow: hidden;
+        border: 8px solid #1a1a1a; /* THEME.surfaceAlt */
+        border-radius: 48px;
+        box-shadow: 0 0 0 2px #333, 0 20px 50px rgba(0,0,0,0.5);
+      }
+      @media (max-width: 500px) {
+        .phone-frame {
+          border: none;
+          border-radius: 0;
+          max-width: 100%;
+        }
       }
     </style>
   <script type="importmap">

@@ -15,6 +15,7 @@ const getDefaultData = (): LocalStorageSchema => ({
   gaitProfile: {},
   rotation: [],
   cart: [],
+  rsvpedEvents: [],
   privacyAudit: {
     lastWipe: null,
     storageUsed: '0KB'
@@ -26,7 +27,7 @@ const getStorage = (): LocalStorageSchema => {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return getDefaultData();
-    
+
     // SAFETY MERGE: This ensures that if the saved data is missing new fields (like rotation),
     // they are filled in from the default data. This fixes "undefined" errors causing button failures.
     const parsed = JSON.parse(raw);
@@ -41,19 +42,19 @@ const setStorage = (data: LocalStorageSchema) => {
   // Calculate storage used roughly
   const jsonString = JSON.stringify(data);
   const bytes = new Blob([jsonString]).size;
-  
+
   // Ensure privacyAudit exists before assigning (safety check)
   if (!data.privacyAudit) {
-      data.privacyAudit = getDefaultData().privacyAudit;
+    data.privacyAudit = getDefaultData().privacyAudit;
   }
   data.privacyAudit.storageUsed = `${(bytes / 1024).toFixed(2)}KB`;
-  
+
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 };
 
 export const storageService = {
   getProfile: (): UserProfile => getStorage().profile,
-  
+
   updateProfile: (updates: Partial<UserProfile>) => {
     const data = getStorage();
     data.profile = { ...data.profile, ...updates };
@@ -98,7 +99,7 @@ export const storageService = {
   addToCart: (item: CartItem) => {
     const data = getStorage();
     const existingIndex = data.cart.findIndex(i => i.shoeId === item.shoeId && i.size === item.size);
-    
+
     if (existingIndex > -1) {
       data.cart[existingIndex].quantity += item.quantity;
     } else {
@@ -112,7 +113,7 @@ export const storageService = {
     data.cart = data.cart.filter(i => !(i.shoeId === shoeId && i.size === size));
     setStorage(data);
   },
-  
+
   clearCart: () => {
     const data = getStorage();
     data.cart = [];
@@ -127,19 +128,30 @@ export const storageService = {
     setStorage(data);
   },
 
-  rsvpEvent: () => {
+  getRsvpedEvents: (): string[] => getStorage().rsvpedEvents ?? [],
+
+  rsvpEvent: (eventId?: string) => {
     const data = getStorage();
     data.profile.attendanceCount = (data.profile.attendanceCount || 0) + 1;
+    if (eventId && !data.rsvpedEvents?.includes(eventId)) {
+      data.rsvpedEvents = [...(data.rsvpedEvents ?? []), eventId];
+    }
+    setStorage(data);
+  },
+
+  removeRsvp: (eventId: string) => {
+    const data = getStorage();
+    data.rsvpedEvents = (data.rsvpedEvents ?? []).filter(id => id !== eventId);
     setStorage(data);
   },
 
   getPrivacyAudit: () => getStorage().privacyAudit,
-  
+
   wipeData: () => {
     localStorage.removeItem(STORAGE_KEY);
     // Force a reload to clear React state and memory
     window.location.reload();
   },
-  
+
   getRawData: () => getStorage()
 };

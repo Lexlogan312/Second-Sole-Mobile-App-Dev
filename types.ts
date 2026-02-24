@@ -1,7 +1,22 @@
 export type ShoeCategory = 'Road' | 'Trail' | 'Track' | 'Hybrid';
 export type SupportType = 'Neutral' | 'Stability';
 export type CushionLevel = 'Firm' | 'Balanced' | 'Plush';
-export type Brand = 'Saucony' | 'Brooks' | 'Hoka' | 'New Balance' | 'Nike' | 'Altra';
+export type Gender = 'Men' | 'Women' | 'Unisex';
+export type Brand =
+  | 'Saucony'
+  | 'Brooks'
+  | 'Hoka'
+  | 'New Balance'
+  | 'Nike'
+  | 'Altra'
+  | 'ASICS'
+  | 'ON Running'
+  | 'Adidas'
+  | 'Puma'
+  | 'Mizuno'
+  | 'Under Armour'
+  | 'Salomon'
+  | 'Skechers';
 
 export interface Shoe {
   id: string;
@@ -17,6 +32,7 @@ export interface Shoe {
   isStaffPick?: boolean;
   description: string;
   staffComparison?: string;
+  gender: Gender;
 }
 
 export interface CartItem {
@@ -26,14 +42,18 @@ export interface CartItem {
 }
 
 export interface GaitProfile {
-  terrain?: string;
-  strike?: string;
-  arch?: string;
-  pronation?: string;
-  distanceGoals?: string;
-  cushionPref?: string;
-  footShape?: string;
-  injuryHistory?: string[];
+  terrain?: string;         // 'Road' | 'Trail' | 'Track' | 'Hybrid'
+  gender?: string;          // 'Men' | 'Women' | 'Unisex'
+  experienceLevel?: string; // 'Beginner' | 'Intermediate' | 'Advanced' | 'Elite'
+  strike?: string;          // 'Heel' | 'Midfoot' | 'Forefoot'
+  arch?: string;            // 'Low' | 'Medium' | 'High'
+  pronation?: string;       // 'Neutral' | 'Over' | 'Under'
+  weeklyMiles?: string;     // 'Low' | 'Medium' | 'High'
+  distanceGoals?: string;   // 'Speed' | 'Daily' | 'Long' | 'Ultra'
+  cushionPref?: string;     // 'Firm' | 'Balanced' | 'Plush'
+  dropPref?: string;        // 'Zero' | 'Low' | 'Medium' | 'High'
+  footShape?: string;       // 'Standard' | 'Wide'
+  injuryHistory?: string[]; // 'None' | 'Plantar' | 'Shin' | 'Knee' | 'ITBand' | 'Hip' | 'Back' | 'Achilles'
 }
 
 export interface ShoeRotationItem {
@@ -64,6 +84,7 @@ export interface LocalStorageSchema {
   gaitProfile: GaitProfile;
   rotation: ShoeRotationItem[];
   cart: CartItem[];
+  rsvpedEvents: string[];
   privacyAudit: PrivacyAudit;
   isAuthenticated: boolean;
 }
@@ -77,6 +98,7 @@ export interface Trail {
   status: 'Open' | 'Muddy' | 'Closed';
   highlights: string[];
   parkingInfo: string;
+  photo?: string;
   coordinates?: { lat: number; lng: number };
 }
 
